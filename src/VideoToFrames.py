@@ -36,7 +36,7 @@ def FrameCapture(path):
 def embedData(hexaValue, frame):
 
     for i in range(64):
-        frame.FrameData[i][0] = int(hexaValue[i], 16)
+        frame.FrameData[i][0][0] = int(hexaValue[i], 16)
 
   
 def pullData(frame):
@@ -44,7 +44,7 @@ def pullData(frame):
     output = ''
 
     for i in range(64):
-        output += str(frame.FrameData[i][0])
+        output += str(frame.FrameData[i][0][0])
 
     return str(hex(int(output)))
 
@@ -56,9 +56,10 @@ if __name__ == '__main__':
     FrameCapture(r"C:\Users\chase\Desktop\TestVideoDataCapture\Sample.mp4") 
 
     embedData('6a48f82d8e828ce82b826a48f82d8e828ce82b826a48f82d8e828ce82b821234',FrameList[0])
-    #print(pullData(FrameList[0]))
-    
 
+    #print(pullData(FrameList[0]))
+
+    #print(pullData(FrameList[0]))
 
     #print(FrameList[0].FrameData[0][0])
 
