@@ -1,13 +1,31 @@
 const express = require('express');
-import {PythonShell} from 'python-shell';
+const {PythonShell} = require("python-shell");
+let exec = require('child_process').exec;
 const exphbs = require('express-handlebars');
 
 const app = express();
 
+
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
-app.get('/', (req, res) => {
-    res.render('index');
+
+function execute(command, callback){
+    exec(command, function(error, stdout, stderr){ callback(stdout); });
+}
+
+
+let a = function(callback){
+    execute('src/dash-cli getrawtransaction '  + tx, function(name){
+        execute("git config --global user.email", function(email){
+            callback({ name: name.replace("\n", ""), email: email.replace("\n", "") });
+        });
+    });
+};
+
+app.get('/tx/:transaction', (req, res) => {
+    console.log(getRawTx(req.params.transaction));
+    //console.log(getRawTx(req.params.transaction));
+    //res.send(getRawTx(req.params.transaction))
 });
 
 app.get('info', (req, res) => {
