@@ -2,8 +2,9 @@ import opReturn as op
 from time import sleep
 import os
 import json
+import sys
 
-
+peram1 = sys.argv[1]
 
 dashCliPath = "/home/nova/Desktop/apps/dash/dashcore-0.14.0/bin/dash-cli "
 
@@ -25,5 +26,5 @@ def getRawTx(tx):
     return rawTx
 
 
-print(getOpFromTx(sendOp("")))
+print(getOpFromTx(sendOp("hello")))
 
