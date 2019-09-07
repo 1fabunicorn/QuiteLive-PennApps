@@ -1,7 +1,7 @@
-from src import OP_RETURN
+from src import opReturn
 from time import sleep
-import subprocess
-import ast
+import os
+import json
 
 
 dashCliPath = "/home/nova/Desktop/apps/dash/dashcore-0.14.0/bin/dash-cli "
@@ -9,6 +9,6 @@ dashCliPath = "/home/nova/Desktop/apps/dash/dashcore-0.14.0/bin/dash-cli "
 tx = OP_RETURN.OP_RETURN_store(b"hello")['txids'][0]
 #print(tx)
 sleep(.5)
-tx = subprocess.check_output(dashCliPath + "gettransaction " + str(tx), shell=True)
-print(ast.literal_eval(tx.decode('utf-8')))
-#print(type(tx))
+tx = os.popen(dashCliPath + "gettransaction " + str(tx)).read()
+tx = json.loads(tx)
+print(tx["hex"])
