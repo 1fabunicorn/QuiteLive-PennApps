@@ -16,7 +16,12 @@
                         </span>
                     </div>
                     <div class="card-body">
-                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium ad commodi dicta eaque eum iste iure, nemo officiis pariatur vitae?</p>
+                        <p class="card-text">
+                            {% if description %}
+                            {{ description }}
+                            {% else %}
+                             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium ad commodi dicta eaque eum iste iure, nemo officiis pariatur vitae?</p>
+                            {% endif %}
                     </div>
                 </div>
                 <div class="pt-3">
@@ -43,7 +48,7 @@
             <div class="col-md-7">
                 <div class="card h-100" style="background: #ddd">
                     <video id="camera-window" autoplay playsinline></video>
-                    <canvas id="canvasElement"></canvas>
+                    <canvas id="canvasElement" hidden></canvas>
                 </div>
             </div>
         </div>
