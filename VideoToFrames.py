@@ -41,4 +41,5 @@ if __name__ == '__main__':
     # Calling the function 
     FrameCapture(r"C:\Users\chase\Desktop\TestVideoDataCapture\Sample.mp4") 
 
-    
+    img = Image.fromarray(FrameList[0].FrameData)
+    img.save()
