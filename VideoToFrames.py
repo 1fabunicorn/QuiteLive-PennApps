@@ -29,7 +29,7 @@ def FrameCapture(path):
         # Saves the frames with frame-count 
         #cv2.imwrite("frame%d.jpg" % count, image) 
 
-        #Creates an object at 
+        #Creates an object for every frame with the data of that frame
         FrameList.append(Frame.Frame(image))
 
         count += 1
