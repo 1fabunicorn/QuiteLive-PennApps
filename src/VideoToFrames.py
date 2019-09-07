@@ -6,6 +6,7 @@ import Frame
 
 #List of objects that holds the data of each frame
 FrameList = []
+intLength = 0
 
 # Function to extract frames 
 def FrameCapture(path): 
@@ -34,17 +35,25 @@ def FrameCapture(path):
         count += 1
 
 def embedData(hexaValue, frame):
+    global intLength
 
-    for i in range(64):
-        frame.FrameData[i][0][0] = int(hexaValue[i], 16)
+    intHex = str(int(hexaValue, 16))
 
-  
-def pullData(frame):
+    intLength = len(intHex)
 
+    for i in range(len(intHex)):
+        frame.FrameData[i][0][0] = intHex[i]
+
+    
+        
+
+def pullData(frame, intLeng):
+    
     output = ''
 
-    for i in range(64):
+    for i in range(intLeng):
         output += str(frame.FrameData[i][0][0])
+        
 
     return str(hex(int(output)))
 
@@ -56,6 +65,9 @@ if __name__ == '__main__':
     FrameCapture(r"C:\Users\chase\Desktop\TestVideoDataCapture\Sample.mp4") 
 
     embedData('6a48f82d8e828ce82b826a48f82d8e828ce82b826a48f82d8e828ce82b821234',FrameList[0])
+    
+    print(pullData(FrameList[0], intLength))
+
 
     #print(pullData(FrameList[0]))
 
