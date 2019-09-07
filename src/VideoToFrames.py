@@ -6,7 +6,12 @@ import Frame
 
 #List of objects that holds the data of each frame
 FrameList = []
+pointList = []
 
+for i in range(32):
+    pointList.append(i)
+for i in range(-32, 0):
+    pointList.append(i)
 
 # Function to extract frames 
 def FrameCapture(path): 
@@ -33,7 +38,38 @@ def FrameCapture(path):
         FrameList.append(Frame.Frame(image))
 
         count += 1
+
+def embedData(hexaValue, frame):
+
+
+    output = str(int(hexaValue, 16))
+
+    return hexaValue
+
+    for i in range(31):
+        for j in range(2):
+            frame.FrameData[i][j] = int(output[i])
+
+    for i in range(-1, -32, -1):
+        for j in range(2):
+            frame.FrameData[i][j] = int(output[i])
+
+
   
+def pullData(frame):
+
+
+    output = ''
+
+    for i in pointList:
+        for j in frame.FrameData[i]:
+            output += str(j)
+
+    return output
+
+
+
+
 
 # Driver Code 
 if __name__ == '__main__': 
@@ -41,5 +77,13 @@ if __name__ == '__main__':
     # Calling the function 
     FrameCapture(r"C:\Users\chase\Desktop\TestVideoDataCapture\Sample.mp4") 
 
-    img = Image.fromarray(FrameList[0].FrameData)
-    img.save('firstFrame.png')
+    print(embedData('6a48f82d8e828ce82b826a48f82d8e828ce82b826a48f82d8e828ce82b821234',FrameList[0]))
+    #print(FrameList[0].FrameData[0][0])
+
+
+    #print(pullData(FrameList[0]))
+
+    #img = Image.fromarray(FrameList[0].FrameData)
+    #img.save('firstFrame.png')
+
+    
