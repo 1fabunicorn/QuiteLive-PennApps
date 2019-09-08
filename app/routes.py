@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template, session
 from app import app
 from app import socketio
 
@@ -7,6 +7,11 @@ from io import BytesIO
 import base64
 
 import cv2
+import os
+import shutil
+
+stream_path = './stream/'
+global image_count
 
 def pil_image_to_base64(pil_image):
     buf = BytesIO()
@@ -31,7 +36,36 @@ def event(message):
 
 @socketio.on('frame')
 def event(frame):
-    print('Frame Recieved; decoding...')
     frame = frame.split(",")[1]
     image = base64_to_pil_image(frame)
-    image.save("pic.jpeg")
+    image.save(stream_path + str(session['count']) + ".jpg")
+    if os.path.exists(stream_path + str(session['count']) + ".jpg"):
+        session['count'] = session['count'] + 1
+
+@socketio.on('stream-start')
+def streamStart(packet):
+    print("STREAM STARTING")
+    try:
+        if os.path.exists(stream_path):
+            shutil.rmtree(stream_path)
+        os.mkdir(stream_path)
+    except OSError:
+        print(OSError)
+
+    session['count'] = 0
+
+@socketio.on('stream-end')
+def streamEnd(packet):
+    print("STREAM ENDING")
+    img1 = cv2.imread(stream_path + '0.jpg')
+
+    height, width, layers = img1.shape
+    vidout = cv2.VideoWriter('output.avi',cv2.VideoWriter_fourcc(*'XVID'), 24.0, (640,480))
+    vidout.write(img1)
+    for i in range(1, session['count']):
+        #print(stream_path + str(i) + '.jpg')
+        framed = cv2.imread(stream_path + str(i) + '.jpg')
+        vidout.write(framed)
+
+    cv2.destroyAllWindows()
+    vidout.release()
