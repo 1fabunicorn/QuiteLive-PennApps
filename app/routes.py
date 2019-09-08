@@ -7,6 +7,8 @@ from io import BytesIO
 import base64
 
 import cv2
+import numpy
+
 import os
 import shutil
 
@@ -37,35 +39,15 @@ def event(message):
 @socketio.on('frame')
 def event(frame):
     frame = frame.split(",")[1]
-    image = base64_to_pil_image(frame)
-    image.save(stream_path + str(session['count']) + ".jpg")
-    if os.path.exists(stream_path + str(session['count']) + ".jpg"):
-        session['count'] = session['count'] + 1
+    img = base64_to_pil_image(frame)
+
+    session['vidout'].write(numpy.array(img)[:, :, ::-1].copy())
 
 @socketio.on('stream-start')
 def streamStart(packet):
-    print("STREAM STARTING")
-    try:
-        if os.path.exists(stream_path):
-            shutil.rmtree(stream_path)
-        os.mkdir(stream_path)
-    except OSError:
-        print(OSError)
-
-    session['count'] = 0
+    session['vidout'] = cv2.VideoWriter('output.avi',cv2.VideoWriter_fourcc(*'XVID'), 24.0, (640,480))
 
 @socketio.on('stream-end')
 def streamEnd(packet):
     print("STREAM ENDING")
-    img1 = cv2.imread(stream_path + '0.jpg')
-
-    height, width, layers = img1.shape
-    vidout = cv2.VideoWriter('output.avi',cv2.VideoWriter_fourcc(*'XVID'), 24.0, (640,480))
-    vidout.write(img1)
-    for i in range(1, session['count']):
-        #print(stream_path + str(i) + '.jpg')
-        framed = cv2.imread(stream_path + str(i) + '.jpg')
-        vidout.write(framed)
-
-    cv2.destroyAllWindows()
-    vidout.release()
+    session['vidout'].release()
