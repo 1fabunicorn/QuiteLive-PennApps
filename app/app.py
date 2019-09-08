@@ -3,6 +3,22 @@ import atexit
 from flask import Flask
 from flask import render_template
 from flask_socketio import SocketIO
+
+from PIL import Image
+from io import BytesIO
+import base64
+
+
+def pil_image_to_base64(pil_image):
+    buf = BytesIO()
+    pil_image.save(buf, format="JPEG")
+    return base64.b64encode(buf.getvalue())
+
+
+def base64_to_pil_image(base64_img):
+    return Image.open(BytesIO(base64.b64decode(base64_img)))
+
+
 from src import sendOp
 
 
@@ -40,8 +56,8 @@ def create_app():
 
     @socketio.on('frame')
     def event(frame):
-        print("Message: " + str(frame))
-
+        print('Frame Recieved; decoding...')
+        print(base64_to_pil_image(frame))
 
     def interrupt():
         global yourThread
