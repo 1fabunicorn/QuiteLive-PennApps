@@ -222,3 +222,7 @@ typings/
 
 
 pic\.jpeg
+
+*.jpeg
+*.avi
+stream/

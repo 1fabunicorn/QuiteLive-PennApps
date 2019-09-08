@@ -66,7 +66,7 @@ function sendFrame() {
         return;
     }
 
-    ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight, 0, 0, 300, 150);
+    ctx.drawImage(video, 0, 0, 640, 480, 0, 0, 640, 480);
 
     let dataURL = canvas.toDataURL('image/jpeg');
     socket.emit('frame', dataURL);
@@ -97,8 +97,9 @@ function startStream(e) {
     // Initiate interval
     socket = io();
     socket.on('connect', function() {
-        socket.emit('message', {data: 'Socket Running'});
+        socket.emit('stream-start', {});
     });
+
     setInterval(function () {
         sendFrame();
     }, 50);
@@ -106,6 +107,7 @@ function startStream(e) {
 
 function stopStream(e) {
     setStatusButton(false);
+    socket.emit('stream-end', {});
     socket.close();
     clearInterval(eventInterval);
 }
