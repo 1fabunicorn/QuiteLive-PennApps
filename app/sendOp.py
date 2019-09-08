@@ -3,12 +3,11 @@ from time import sleep
 import os
 import json
 
-dashCliPath = "/home/nova/Desktop/apps/dash/dashcore-0.14.0/bin/dash-cli "
+dashCliPath = "/home/phillipsw1/Desktop/dashcore-0.14.0/bin/dash-cli "
 
 
 def sendOpTx(data):
     txid = op.OP_RETURN_store(str.encode(data))['txids'][0]
-    sleep(2)
     return txid
 
 
@@ -22,3 +21,7 @@ def getRawTx(tx):
     rawTx = os.popen(dashCliPath + "getrawtransaction " + str(tx)).read()
     return rawTx
 
+def getBlockHash(tx):
+
+    t = json.load(os.popen(dashCliPath + "gettransaction " + str(tx)).read())
+    return t
