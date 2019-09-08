@@ -2,6 +2,7 @@ import threading
 import atexit
 from flask import Flask
 from flask import render_template
+from flask_socketio import SocketIO
 from src import sendOp
 
 
@@ -17,15 +18,30 @@ dataStruct = {
 dataLock = threading.Lock()
 # thread handler
 yourThread = threading.Thread()
-
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'secret!'
+socketio = SocketIO(app)
 
 def create_app():
-    app = Flask(__name__)
+
 
     @app.route('/')
     @app.route('/index')
     def index():
-        return render_template('index.html', title='Home')
+        return render_template('index.html', title='QuiteLive Dashboard')
+
+    @app.route('/info')
+    def info():
+        return render_template('info.html', title='About QuiteLive')
+
+    @socketio.on('message')
+    def event(message):
+        print("Message: " + str(message))
+
+    @socketio.on('frame')
+    def event(frame):
+        print("Message: " + str(frame))
+
 
     def interrupt():
         global yourThread
