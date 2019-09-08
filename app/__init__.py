@@ -4,7 +4,7 @@ from flask_socketio import SocketIO
 # Require eventlet
 
 app = Flask(__name__)
-app.debug = False
+#app.debug = False
 app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app)
 

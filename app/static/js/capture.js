@@ -20,7 +20,6 @@ let ctx = canvas.getContext('2d');
 
 var localMediaStream = null;
 var eventInterval = null;
-var socket = null;
 
 function handleSuccess(stream) {
     const video = document.querySelector('video');
@@ -94,23 +93,22 @@ function startStream(e) {
     // First, change the button
     setStatusButton(true);
 
-    // Initiate interval
-    socket = io();
-    socket.on('connect', function() {
-        socket.emit('stream-start', {});
-    });
+    socket.emit('stream-start', {});
 
-    setInterval(function () {
+    eventInterval = setInterval(function () {
         sendFrame();
     }, 50);
 }
 
 function stopStream(e) {
     setStatusButton(false);
-    socket.emit('stream-end', {});
-    socket.close();
     clearInterval(eventInterval);
+    socket.emit('stream-end', {});
 }
+
+socket.on('desc', function open(data) {
+    document.getElementById("desc").innerText = data;
+});
 
 document.querySelector('#showVideo').addEventListener('click', e => init(e));
 

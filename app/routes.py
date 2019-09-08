@@ -52,8 +52,13 @@ def event(frame):
         session['count'] = session['count'] + 1
     if session['startFlag']:
         hashOfFirstFrame = hashFile.sha256sum(stream_path + str(session['count'] - 1) + ".jpg")
-        print(sendOp.sendOpTx(hashOfFirstFrame))
+        htmlthing = sendOp.sendOpTx(hashOfFirstFrame)
         session['startFlag'] = False
+        socketio.emit('desc',"""
+            Your Hash:
+            
+        """ + str(htmlthing)
+                      )
     # tryHash = sendOp.getBlockHash(session['FirstFrameHash'])
     # if tryHash == "error code: -5\nerror message:\nInvalid or non-wallet transaction id":
     #     pass
