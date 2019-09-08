@@ -66,7 +66,7 @@ function sendFrame() {
         return;
     }
 
-    ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight, 0, 0, video.videoWidth, video.videoHeight)
+    ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight, 0, 0, 300, 150);
 
     let dataURL = canvas.toDataURL('image/jpeg');
     socket.emit('frame', dataURL);
